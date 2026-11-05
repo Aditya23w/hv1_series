@@ -1,0 +1,20 @@
+<launch>
+  <arg
+    name="model" />
+  <param
+    name="robot_description"
+    textfile="$(find HV1V2_URDF_NEW_FOOT_V1_220926)/urdf/HV1V2_URDF_NEW_FOOT_V1_220926.urdf" />
+  <node
+    name="joint_state_publisher_gui"
+    pkg="joint_state_publisher_gui"
+    type="joint_state_publisher_gui" />
+  <node
+    name="robot_state_publisher"
+    pkg="robot_state_publisher"
+    type="robot_state_publisher" />
+  <node
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(find HV1V2_URDF_NEW_FOOT_V1_220926)/urdf.rviz" />
+</launch>

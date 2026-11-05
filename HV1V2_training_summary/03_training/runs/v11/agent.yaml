@@ -1,0 +1,71 @@
+seed: 43
+num_steps_per_env: 24
+max_iterations: 40000
+obs_groups:
+  actor: !!python/tuple
+  - actor
+  critic: !!python/tuple
+  - critic
+save_interval: 200
+experiment_name: hv1v2_velocity
+run_name: v11g_s43
+logger: tensorboard
+wandb_project: mjlab
+wandb_tags: !!python/tuple []
+resume: true
+load_run: 2026-11-02_09-10-54_v11f_s43
+load_checkpoint: model_14400\.pt
+clip_actions: null
+upload_model: true
+class_name: OnPolicyRunner
+actor:
+  hidden_dims: !!python/tuple
+  - 512
+  - 256
+  - 128
+  activation: elu
+  obs_normalization: true
+  cnn_cfg: null
+  distribution_cfg:
+    class_name: GaussianDistribution
+    init_std: 1.0
+    std_type: scalar
+  rnn_type: null
+  rnn_hidden_dim: 256
+  rnn_num_layers: 1
+  class_name: MLPModel
+critic:
+  hidden_dims: !!python/tuple
+  - 512
+  - 256
+  - 128
+  activation: elu
+  obs_normalization: true
+  cnn_cfg: null
+  distribution_cfg: null
+  rnn_type: null
+  rnn_hidden_dim: 256
+  rnn_num_layers: 1
+  class_name: MLPModel
+algorithm:
+  num_learning_epochs: 5
+  num_mini_batches: 4
+  learning_rate: 0.001
+  schedule: adaptive
+  gamma: 0.99
+  lam: 0.95
+  entropy_coef: 0.005
+  desired_kl: 0.01
+  max_grad_norm: 1.0
+  value_loss_coef: 1.0
+  use_clipped_value_loss: true
+  clip_param: 0.2
+  normalize_advantage_per_mini_batch: false
+  optimizer: adam
+  share_cnn_encoders: false
+  class_name: PPO
+  symmetry_cfg:
+    use_data_augmentation: false
+    use_mirror_loss: true
+    mirror_loss_coeff: 1.0
+    data_augmentation_func: mjlab_hv1v2.symmetry:mirror_v11

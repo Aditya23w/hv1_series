@@ -1,0 +1,57 @@
+# ---------------------------------------------------------------------------
+# hv1_series .gitignore
+# ---------------------------------------------------------------------------
+
+# --- separate git repositories (see README: Setup) --------------------------
+# upstream mujocolab/mjlab, pinned commit in README
+/mjlab_src/
+# own repo github.com/Aditya23w/merai_sdk (stale copy here)
+/merai_sdk/
+
+# --- training outputs (regenerable, multi-GB) -------------------------------
+**/logs/
+/runs/
+wandb/
+outputs/
+**/videos/
+events.out.tfevents.*
+
+# --- model checkpoints: keep deployable ONNX / MNN / deploy.json only -------
+*.pt
+*.pth
+*.ckpt
+
+# --- raw curve dumps in the training summary (tens of MB each) -------------
+HV1V2_training_summary/03_training/runs/*/curves.csv
+
+# --- python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# --- environments -----------------------------------------------------------
+.venv*/
+venv/
+env/
+.env
+.env.*
+
+# --- logs / scratch ---------------------------------------------------------
+*.log
+MUJOCO_LOG.TXT
+*.tmp
+*.swp
+*~
+
+# --- editors / OS -----------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

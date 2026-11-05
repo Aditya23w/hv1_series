@@ -1,0 +1,7 @@
+run dir: mjlab_hv1v2/logs/rsl_rl/hv1v2_velocity/2026-09-24_21-01-54_v2
+model_0.pt
+model_200.pt
+model_400.pt
+model_600.pt
+model_800.pt
+model_1000.pt

@@ -1,0 +1,33 @@
+| # | joint | actuator | kp | kd | action_scale | anchor rad | peak N·m | cont N·m |
+|---|---|---|---|---|---|---|---|---|
+| 0 | `right_hip_pitch_joint` | X12-320 | 250 | 15 | 0.32 | -0.10142 | 320 | 85 |
+| 1 | `right_hip_roll_joint` | X12-320 | 250 | 15 | 0.32 | +0.00249 | 320 | 85 |
+| 2 | `right_hip_yaw_joint` | X12-320 | 250 | 15 | 0.32 | +0.05062 | 320 | 85 |
+| 3 | `right_knee_joint` | X12-320 | 250 | 15 | 0.32 | +0.35023 | 320 | 85 |
+| 4 | `right_ankle_pitch_joint` | X8-120x2 | 400 | 24 | 0.15 | -0.26231 | 240 | 86 |
+| 5 | `right_ankle_roll_joint` | X8-120x2 | 400 | 24 | 0.15 | -0.00026 | 240 | 86 |
+| 6 | `left_hip_pitch_joint` | X12-320 | 250 | 15 | 0.32 | -0.10082 | 320 | 85 |
+| 7 | `left_hip_roll_joint` | X12-320 | 250 | 15 | 0.32 | -0.00246 | 320 | 85 |
+| 8 | `left_hip_yaw_joint` | X12-320 | 250 | 15 | 0.32 | -0.05032 | 320 | 85 |
+| 9 | `left_knee_joint` | X12-320 | 250 | 15 | 0.32 | +0.34977 | 320 | 85 |
+| 10 | `left_ankle_pitch_joint` | X8-120x2 | 400 | 24 | 0.15 | -0.26237 | 240 | 86 |
+| 11 | `left_ankle_roll_joint` | X8-120x2 | 400 | 24 | 0.15 | +0.00026 | 240 | 86 |
+| 12 | `waist_yaw_joint` | X8-120 | 200 | 12 | 0 | +0.00000 | 120 | 43 |
+| 13 | `waist_roll_joint` | X8-120x2 | 400 | 24 | 0 | +0.00000 | 240 | 86 |
+| 14 | `waist_pitch_joint` | X8-120x2 | 400 | 24 | 0 | +0.00000 | 240 | 86 |
+| 15 | `right_shoulder_pitch_joint` | X8-120 | 200 | 12 | 0.15 | +0.20000 | 120 | 43 |
+| 16 | `right_shoulder_roll_joint` | X8-120 | 200 | 12 | 0.15 | -0.12000 | 120 | 43 |
+| 17 | `right_shoulder_yaw_joint` | X8-120 | 200 | 12 | 0.15 | +0.00000 | 120 | 43 |
+| 18 | `right_elbow_joint` | X8-120 | 200 | 12 | 0.15 | +0.90000 | 120 | 43 |
+| 19 | `right_wrist_roll_joint` | X6-60 | 200 | 12 | 0 | +0.00000 | 60 | 20 |
+| 20 | `right_wrist_pitch_joint` | X4-36 | 100 | 6 | 0 | +0.00000 | 34 | 10.5 |
+| 21 | `right_wrist_yaw_joint` | X4-36 | 100 | 6 | 0 | +0.00000 | 34 | 10.5 |
+| 22 | `left_shoulder_pitch_joint` | X8-120 | 200 | 12 | 0.15 | +0.20000 | 120 | 43 |
+| 23 | `left_shoulder_roll_joint` | X8-120 | 200 | 12 | 0.15 | +0.12000 | 120 | 43 |
+| 24 | `left_shoulder_yaw_joint` | X8-120 | 200 | 12 | 0.15 | +0.00000 | 120 | 43 |
+| 25 | `left_elbow_joint` | X8-120 | 200 | 12 | 0.15 | +0.90000 | 120 | 43 |
+| 26 | `left_wrist_roll_joint` | X6-60 | 200 | 12 | 0 | +0.00000 | 60 | 20 |
+| 27 | `left_wrist_pitch_joint` | X4-36 | 100 | 6 | 0 | +0.00000 | 34 | 10.5 |
+| 28 | `left_wrist_yaw_joint` | X4-36 | 100 | 6 | 0 | +0.00000 | 34 | 10.5 |
+| 29 | `head_yaw_joint` | X4-36 | 100 | 6 | 0 | +0.00000 | 34 | 10.5 |
+| 30 | `head_pitch_joint` | X4-36 | 100 | 6 | 0 | +0.00000 | 34 | 10.5 |

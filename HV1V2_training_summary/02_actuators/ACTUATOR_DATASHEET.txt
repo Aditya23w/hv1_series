@@ -1,0 +1,305 @@
+================================================================================
+ACTUATOR SPECIFICATIONS, VENDOR DATA ONLY
+================================================================================
+Actuators only. No joint mapping, no robot-specific tuning, no fitted values in
+the main table. Every number below is either printed in a MyActuator document
+or arithmetic on printed numbers, and each is labelled which.
+
+SOURCES (both on disk, both primary -- not web, not reseller, not forum):
+
+  [PM]  "X Series-V4 product manual- 260804.pdf", per-model Product Parameters
+        ~/rmd/(X-V4) Protocol and manual of V4-260805/
+        X4-36 p4, X6-60 p6, X8-120 p8, X12-320 p9.  NEWER (2026-08-04).
+  [UM]  "User Manual for X Series Products V1.1-250516.pdf", Table 3-3
+        "Module parameter list", and Tables 3-4..3-9 stall data.
+        same directory.  OLDER (2025-05-16).
+  [DS]  "X8-120 Motor Parameter 260804.pdf"  ~/rmd/RMD-X8-P20-120 260804/
+        Single-model sheet; agrees with [PM] p8 line for line.
+
+Vendor: Suzhou Micro Actuator Technology Co., Ltd (MyActuator).
+Sub-brand RMD = "Reducer Motor Drive".
+
+PART NUMBER FORMAT  [UM Table 3-1]:   RMD - X8 - P20 - 120 - E
+                                       |     |     |     |    |
+                            brand ------+     |     |     |    |
+                            base number ------+     |     |    |
+                            GEAR RATIO (rounded) ---+     |    |
+                            PEAK TORQUE N.m ---------------+   |
+                            C = CAN BUS, E = EtherCAT ---------+
+
+--------------------------------------------------------------------------------
+                          X4-36        X6-60        X8-120       X12-320
+--------------------------------------------------------------------------------
+full part name [UM 3-2]   RMD-X4-      RMD-X6-      RMD-X8-      RMD-X12-
+                          P36-36-E     P20-60-E     P20-120-E    P20-320-E
+short name                X4-P36       X6-P20       X8-P20       X12-P20
+on this robot             wrist        wrist_roll   ankle,waist, hip x3,
+                          pitch/yaw                 shoulder,    knee
+                                                    elbow
+count                     4            2            15           8
+
+-- TORQUE --------------------------------------------------------------------
+rated torque      N.m     10.5         20.0         43.0         85.0
+peak torque       N.m     34           60           120          320
+back drive torque N.m     1.14         1.6          1.5          3.8
+torque constant   N.m/A   1.9          2.1          2.4          3.3
+                          (output-side: rated_current x KT ~= rated torque)
+
+-- SPEED ---------------------------------------------------------------------
+gear ratio        -       36           19.612       19.612       20
+no-load speed     RPM     111          176          158          125
+no-load speed     rad/s   11.62        18.43        16.55        13.09   [calc]
+rated speed       RPM     83           153          127          100
+rated power       W       100          320          574          900
+
+-- ELECTRICAL ----------------------------------------------------------------
+input voltage     V       24           48           48           48
+voltage range     V       20-55        20-55        20-55        20-70
+no-load current   A       0.9          0.9          1.6          2.7
+rated current     Arms    6.1          9.5          17.6         30.0
+peak current      Arms    21.5         29.1         43.8         100.0
+efficiency        %       63.1         72.7         79.0         75
+back-EMF const    Vdc/    6.0          16.0         19.2         17.9
+                  Krpm
+line resistance   ohm     0.39 [PM]    0.41         0.18         0.12
+                          0.35 [UM]  <- the two documents DISAGREE, see note 1
+line inductance   mH      0.07 [PM]    0.51         0.31         0.05
+                          0.17 [UM]  <- DISAGREE
+pole pairs        -       11   [PM]    10           10           20
+                          13   [UM]  <- DISAGREE
+
+-- MECHANICAL ----------------------------------------------------------------
+inertia           kg.cm2  0.3          0.66         1.5          12.9
+                          see note 2 -- the vendor does not say referred to WHAT
+backlash          arcmin  <=15 [PM]    <=15         <=15         <=15
+                          10   [UM]    10           10           10   <- DISAGREE
+weight            kg      0.36         0.82         1.40         2.37
+radial load       kN      1.5          2            4.5          5
+axial tension     kN      1.3          1.8          4            4.5   [UM]
+axial compression kN      1.3          0.8          1            4.5   [UM]
+output bearing            cross roller cross roller cross roller cross roller
+repeatability     deg     NOT PUBLISHED -- see note 7; the [UM] row headed
+                          "Repeatability (Degree)" is the INERTIA row mislabelled
+encoder                   dual ABS     dual ABS     dual ABS     dual ABS
+                          17bit in /   17bit in /   17bit in /   17bit in /
+                          18bit out    17bit out    17bit out    17bit out
+control accuracy  deg     <0.01        <0.01        <0.01        <0.01
+insulation grade          F            F            F            F
+comms                     EtherCAT/CAN EtherCAT/CAN EtherCAT/CAN EtherCAT/CAN
+
+-- STALL / THERMAL ENDURANCE  [UM Tables 3-5..3-9] ---------------------------
+   How long the vendor says you may hold an over-rated torque, and the
+   temperature rise it costs. This is the closest thing published to a thermal
+   model, and it is what actually limits a standing humanoid.
+
+   X4-36     17.25 N.m -> 15 s (+30 C)    23    -> 10 s (+58 C)
+             28.75     ->  5 s (+41 C)    34.5  ->  3 s (+50 C)
+   X6-60     30        -> 15 s (+17 C)    40    -> 10 s (+29 C)
+             50        ->  8 s (+37 C)    60    ->  5 s (+24 C)
+   X8-120    64.5      -> 15 s ( +7 C)    86    -> 10 s (+10 C)
+             107.5     ->  8 s (+26 C)    129   ->  5 s (+30 C)
+   X12-320   150       -> 10 s (+13 C)    200   ->  8 s ( +5 C)
+             250       ->  7 s ( +7 C)    300   ->  3 s (+43 C)
+
+--------------------------------------------------------------------------------
+DERIVED FROM VENDOR DATA -- arithmetic only, no fitting
+--------------------------------------------------------------------------------
+                          X4-36        X6-60        X8-120       X12-320
+
+reflected rotor inertia, IF the published "inertia" is motor-side:
+  J_out = J * ratio^2
+                  kg.m2   0.0389       0.0254       0.0577       0.5160
+  ( 0.3e-4*36^2   0.66e-4*19.612^2   1.5e-4*19.612^2   12.9e-4*20^2 )
+
+no-load torque at the output, i0 * KT:
+                  N.m     1.71         1.89          3.84         8.91
+
+torque available per amp at the output is KT directly (see note 3).
+
+--------------------------------------------------------------------------------
+NOT PUBLISHED BY THE VENDOR
+--------------------------------------------------------------------------------
+  viscous damping coefficient b [N.m/(rad/s)]   NOT PUBLISHED.
+      Can only be inferred: b ~ (i0*KT - T_backdrive) / no_load_speed_rad_s
+                  X4-36   (1.71-1.14)/11.62 = 0.049
+                  X6-60   (1.89-1.60)/18.43 = 0.016
+                  X8-120  (3.84-1.50)/16.55 = 0.141
+                  X12-320 (8.91-3.80)/13.09 = 0.390
+      This assumes the whole no-load torque splits into Coulomb + viscous with
+      nothing else in it, which ignores iron losses. Treat as an upper bound.
+
+  rotor inertia, stated as such                 NOT PUBLISHED (see note 2)
+  motor-side vs output-side inertia convention  NOT PUBLISHED
+  friction vs temperature                       NOT PUBLISHED
+  torque ripple / cogging                       NOT PUBLISHED
+  current loop bandwidth                        NOT PUBLISHED
+  thermal time constant, winding/housing        NOT PUBLISHED
+      (only the discrete stall table above)
+  continuous duty cycle derating curve          NOT PUBLISHED
+
+--------------------------------------------------------------------------------
+NOTES
+--------------------------------------------------------------------------------
+1. THE TWO VENDOR DOCUMENTS DISAGREE on three X4-36 electrical values and on
+   backlash for all four. [PM] is newer (2026-08-04) than [UM] (2025-05-16), so
+   prefer [PM] where they conflict. Both values are printed above rather than
+   silently picking one. None of the disagreements touch torque, speed, ratio,
+   current, inertia or back-drive torque.
+
+2. "Inertia (kg.cm2)" is printed with NO statement of what it is referred to.
+   If it is motor-side rotor inertia then the reflected value is the row in the
+   derived block. If it is already output-referred it is 3-4 orders of magnitude
+   too small to be the dominant term at the joint. The arithmetic is given so
+   the assumption is visible; it has NOT been confirmed with the vendor.
+
+3. The torque constant is OUTPUT-SIDE, confirmed by the vendor's own numbers:
+       X8-120   17.6 Arms * 2.4 = 42.2 N.m  vs  rated 43     (2% )
+       X6-60     9.5      * 2.1 = 20.0      vs  rated 20      (0% )
+       X12-320  30.0      * 3.3 = 99.0      vs  rated 85     (16%)
+       X4-36     6.1      * 1.9 = 11.6      vs  rated 10.5   (10%)
+   So KT already includes the gear ratio. Do not multiply by it again.
+
+4. THE X4-36 NAME IS SELF-CONTRADICTORY IN THE VENDOR'S OWN DOCUMENTS.
+   [UM] Table 3-1 says the 4th field of the part number is PEAK TORQUE, and
+   [UM] Table 3-2 lists the full name as RMD-X4-P36-36. But both [UM] Table 3-3
+   and [PM] p4 print PEAK TORQUE = 34 N.m. The gear ratio is also 36.
+   So "36" in the name is not reliable; 34 N.m is the specified peak.
+   For the other three the name and the parameter table agree
+   (X6 60/60, X8 120/120, X12 320/320).
+
+5. X6-P20 and X8-P20 share gear ratio 19.612 exactly. X12-P20's ratio is a
+   round 20, NOT 19.612 -- easy to assume otherwise from the "P20".
+
+6. BACK DRIVE TORQUE is the vendor's own Coulomb-friction-like figure and is
+   the right field to source a simulator's `frictionloss` from. It is published
+   for all four here and is absent from [UM] Table 3-3 -- it appears only in the
+   per-model product pages.
+
+   CONFLICTING VALUE ON RECORD for X8-120. MyActuator's GENERAL CATALOG 2025
+   lists X8-120 back drive torque as 3.21 N.m. Both local 2026-08-04 documents
+   ([PM] p8 and [DS]) print 1.5 N.m. 1.5 is used here because (a) those two are
+   newer and mutually independent, and (b) the one hardware measurement on this
+   robot -- 1.44 +- 0.14 N.m, free-swing elbow pendulum decay -- agrees with 1.5
+   to 4% and with 3.21 not at all. If you ever see 3.21 quoted, it is the 2025
+   catalog.
+
+7. [UM] TABLE 3-3 HAS A MISLABELLED ROW. Its row headed "Repeatability
+   (Degree)" reads 0.17 / 0.25 / 0.3 / 0.66 / 1.5 / 2.4 / 12.9 / 31.6 across the
+   eight models. Those are the INERTIA values in Kg.cm2 -- identical, in the same
+   model order, to the "Inertia" row on the [PM] per-model pages. A repeatability
+   of 12.9 degrees is also absurd for a module the same table rates at <0.01 deg
+   control accuracy. So: Table 3-3 publishes no usable repeatability figure, and
+   anyone reading Table 3-3 alone would wrongly conclude inertia is unpublished.
+   Actual repeatability: NOT PUBLISHED.
+
+8. NO-LOAD CURRENT IS DC BUS CURRENT, NOT PHASE CURRENT. [PM] names the row
+   "No-Load INPUT Current (A)" while the torque constant is defined per Arms of
+   PHASE current. So i0 * KT mixes two different currents and is not
+   dimensionally sound -- it also sweeps in inverter and iron losses. It is
+   retained above only as a loose upper bound. Where a Coulomb friction figure
+   is wanted, prefer BACK DRIVE TORQUE, which the vendor measures at the output
+   and publishes directly.
+================================================================================
+
+================================================================================
+APPENDIX -- WHAT OUR SIMULATOR CURRENTLY USES, AGAINST THE ABOVE
+================================================================================
+NOT VENDOR DATA. This block exists so the gaps are visible; everything above
+this line is the vendor's. Ours are from
+mjlab_src/src/mjlab/asset_zoo/robots/h1v1/h1v1_constants.py (the _V11 rows).
+
+                    ours      vendor-derived    ours/vendor
+effort_limit (N.m)  -- matches the published PEAK TORQUE exactly, all four:
+  X4-36              34.0      34               1.00
+  X6-60              60.0      60               1.00
+  X8-120            120.0     120               1.00
+  X12-320           320.0     320               1.00
+
+armature (kg.m2)    -- vendor column is inertia * ratio^2, ASSUMING the
+                       published "Inertia" is motor-side. See note 2.
+  X4-36             0.0034    0.0389            0.09
+  X6-60             0.0099    0.0254            0.39
+  X8-120            0.0410    0.0577            0.71
+  X12-320           0.3269    0.5160            0.63
+  -> ours are 1.4x to 11x LOWER, and not by a consistent factor, so they were
+     not derived from this table. Provenance of ours: "vendor model", never
+     bench-fitted. If the published inertia IS motor-side, every armature in
+     our plant is too small, and the X4 badly so. WORTH RESOLVING -- armature
+     sets the high-frequency response the policy learns against.
+
+frictionloss (N.m)  -- vendor column is BACK DRIVE TORQUE
+  X4-36             0.990     1.14              0.87
+  X6-60             0.220     1.60              0.14   <-- 7x too low
+  X8-120            1.440     1.50              0.96   <-- ours is MEASURED
+  X12-320           4.330     3.80              1.14
+  -> three of four agree within 15%. The X8 row is the one number on this robot
+     that was measured on hardware (free-swing elbow pendulum decay, 1.44 +-
+     0.14 N.m) and it lands within 4% of the vendor's back-drive torque, which
+     is good evidence that back-drive torque is the right field to use.
+     X6-60 is the outlier and drives wrist_roll only, which is pinned at
+     action_scale 0.0, so it has had no effect on any trained policy yet.
+
+viscous_damping     -- vendor column is (i0*KT - backdrive) / no_load_speed,
+[N.m/(rad/s)]          an upper bound that ignores iron losses
+  X4-36             0.062     0.049             1.27
+  X6-60             0.093     0.016             5.81
+  X8-120            0.161     0.141             1.14
+  X12-320           0.350     0.390             0.90
+  -> same picture: X8 and X12 close, X6 far off.
+
+stiffness / damping (kp/kd) are NOT actuator properties. They are our control
+choice and are in ACTUATORS.txt section 5.
+
+--------------------------------------------------------------------------------
+FOR RL TRAINING, THE SHORT VERSION
+--------------------------------------------------------------------------------
+Use, straight from the vendor:
+  effort_limit  = peak torque        34 / 60 / 120 / 320 N.m
+  continuous    = rated torque       10.5 / 20 / 43 / 85 N.m
+  frictionloss  = back drive torque  1.14 / 1.6 / 1.5 / 3.8 N.m
+  velocity cap  = no-load speed      11.62 / 18.43 / 16.55 / 13.09 rad/s
+  torque/current= KT (output-side)   1.9 / 2.1 / 2.4 / 3.3 N.m/A
+
+Do NOT take from the vendor without deciding the convention first:
+  armature -- the published "Inertia" has no stated reference frame (note 2).
+
+Not published at all, so either measure it or randomise over it:
+  viscous damping, torque ripple, current-loop bandwidth, thermal time
+  constants, friction vs temperature.
+
+The stall table is the only thermal information that exists. For a humanoid
+that stands still, it is the binding constraint: an X8 at 86 N.m -- twice its
+43 N.m rating -- is rated for 10 seconds.
+================================================================================
+
+| Joint Name                 | Actuator |
+| -------------------------- | -------- |
+| right_hip_pitch_joint      | X12-320  |
+| right_hip_roll_joint       | X12-320  |
+| right_hip_yaw_joint        | X12-320  |
+| right_knee_joint           | X12-320  |
+| right_ankle_pitch_joint    | X8-120   |
+| right_ankle_roll_joint     | X8-120   |
+| left_hip_pitch_joint       | X12-320  |
+| left_hip_roll_joint        | X12-320  |
+| left_hip_yaw_joint         | X12-320  |
+| left_knee_joint            | X12-320  |
+| left_ankle_pitch_joint     | X8-120   |
+| left_ankle_roll_joint      | X8-120   |
+| waist_yaw_joint            | X8-120   |
+| waist_roll_joint           | X8-120   |
+| waist_pitch_joint          | X8-120   |
+| right_shoulder_pitch_joint | X8-120   |
+| right_shoulder_roll_joint  | X8-120   |
+| right_shoulder_yaw_joint   | X8-120   |
+| right_elbow_joint          | X8-120   |
+| right_wrist_roll_joint     | X6-60    |
+| right_wrist_pitch_joint    | X4-36    |
+| right_wrist_yaw_joint      | X4-36    |
+| left_shoulder_pitch_joint  | X8-120   |
+| left_shoulder_roll_joint   | X8-120   |
+| left_shoulder_yaw_joint    | X8-120   |
+| left_elbow_joint           | X8-120   |
+| left_wrist_roll_joint      | X6-60    |
+| left_wrist_pitch_joint     | X4-36    |
+| left_wrist_yaw_joint       | X4-36    |

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mjlab-hv1v2"
+version = "0.1.0"
+description = "HV1V2 humanoid robot and velocity-tracking tasks for mjlab"
+requires-python = ">=3.10,<3.14"
+# Pinned: the entity/actuator config shapes used here are 1.6.0-specific
+# (EntityArticulationInfoCfg has exactly two fields, BuiltinPositionActuatorCfg
+# has no velocity_limit, tasks register through mjlab.tasks.registry).
+dependencies = ["mjlab==1.6.0"]
+
+# This is what makes the package a real mjlab plugin: mjlab's
+# _import_registered_packages() walks this entry-point group on `import mjlab`
+# and imports each target, which is when our register_mjlab_task calls fire.
+# Nothing needs to be vendored into the mjlab checkout.
+[project.entry-points."mjlab.tasks"]
+mjlab_hv1v2 = "mjlab_hv1v2"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mjlab_hv1v2 = ["assets/hv1v2/*.xml", "assets/hv1v2/meshes/*.STL"]

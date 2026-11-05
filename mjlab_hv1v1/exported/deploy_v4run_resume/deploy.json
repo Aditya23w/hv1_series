@@ -1,0 +1,642 @@
+{
+  "meta": {
+    "robot": "HV1V1",
+    "run": "2026-09-28_10-04-13_v4run_resume",
+    "task": "Mjlab-Velocity-Flat-HV1V1",
+    "iterations": 39999,
+    "exported_utc": "2026-09-28T09:08:35+00:00",
+    "mjlab_commit": "c2e1e0640",
+    "mujoco": "3.11.0",
+    "total_mass_kg": 94.308807938022,
+    "armature_provenance": "vendor J*ratio^2, motor-side assumption UNCONFIRMED"
+  },
+  "control": {
+    "sim_timestep": 0.005,
+    "decimation": 4,
+    "control_dt": 0.02,
+    "control_hz": 50.0,
+    "root_body": "pelvis"
+  },
+  "policy": {
+    "file": "policy.onnx",
+    "input_name": "obs",
+    "output_name": "actions",
+    "obs_dim": 498,
+    "action_dim": 31,
+    "observation_layout": "term-major, oldest-first; each term's full history is contiguous, then terms concatenate in this order. The LAST dim values of each term's slice are the current frame.",
+    "history_init": "backfill every slot with the first reading at t=0; do NOT zero-fill",
+    "observation": [
+      {
+        "name": "base_ang_vel",
+        "dim": 3,
+        "history": 5,
+        "contributes": 15,
+        "source": "imu:angular_velocity (pelvis frame, rad/s)"
+      },
+      {
+        "name": "projected_gravity",
+        "dim": 3,
+        "history": 5,
+        "contributes": 15,
+        "source": "imu:attitude -> R_pelvis^T @ [0,0,-1] (unit vector)"
+      },
+      {
+        "name": "joint_pos",
+        "dim": 31,
+        "history": 5,
+        "contributes": 155,
+        "source": "encoders: q - anchor.default_joint_pos (rad)"
+      },
+      {
+        "name": "joint_vel",
+        "dim": 31,
+        "history": 5,
+        "contributes": 155,
+        "source": "encoders: qdot (rad/s)"
+      },
+      {
+        "name": "actions",
+        "dim": 31,
+        "history": 5,
+        "contributes": 155,
+        "source": "previous RAW policy output (before action_scale)"
+      },
+      {
+        "name": "command",
+        "dim": 3,
+        "history": 1,
+        "contributes": 3,
+        "source": "operator twist [vx, vy, wz]"
+      }
+    ]
+  },
+  "anchor": {
+    "note": "action mapping is  target[i] = anchor[i] + raw_action[i] * action_scale[i]",
+    "default_joint_pos": {
+      "right_hip_pitch_joint": -0.11806,
+      "right_hip_roll_joint": 0.00337,
+      "right_hip_yaw_joint": 0.05889,
+      "right_knee_joint": 0.37554,
+      "right_ankle_pitch_joint": -0.27378,
+      "right_ankle_roll_joint": -0.00035,
+      "left_hip_pitch_joint": -0.091,
+      "left_hip_roll_joint": -0.002,
+      "left_hip_yaw_joint": -0.04544,
+      "left_knee_joint": 0.3242,
+      "left_ankle_pitch_joint": -0.24533,
+      "left_ankle_roll_joint": 0.00021,
+      "waist_yaw_joint": 0.0,
+      "waist_roll_joint": 0.0,
+      "waist_pitch_joint": 0.0,
+      "right_shoulder_pitch_joint": 0.2,
+      "right_shoulder_roll_joint": -0.12,
+      "right_shoulder_yaw_joint": 0.0,
+      "right_elbow_joint": 0.9,
+      "right_wrist_roll_joint": 0.0,
+      "right_wrist_pitch_joint": 0.0,
+      "right_wrist_yaw_joint": 0.0,
+      "left_shoulder_pitch_joint": 0.2,
+      "left_shoulder_roll_joint": 0.12,
+      "left_shoulder_yaw_joint": 0.0,
+      "left_elbow_joint": 0.9,
+      "left_wrist_roll_joint": 0.0,
+      "left_wrist_pitch_joint": 0.0,
+      "left_wrist_yaw_joint": 0.0,
+      "head_yaw_joint": 0.0,
+      "head_pitch_joint": 0.0
+    },
+    "pelvis_height_m": 0.97697
+  },
+  "ready_pose": {
+    "note": "Servo here with joint PD before handing over to the policy. Identical to the anchor. NOTE this is NOT the sole-centre rule HV1V2 uses: HV1V1's ankle sits 22.0% along its sole instead of 36.5%, so centring the CoM would put it 78.7 mm ahead of the ankle and the pose diverges open-loop in 0.89 s. This pose is at 34.4% of the sole (+34.7 mm), which measured the slowest open-loop creep of any candidate, -0.21 mm/s against HV1V2's -0.83 mm/s.",
+    "joint_pos": {
+      "right_hip_pitch_joint": -0.11806,
+      "right_hip_roll_joint": 0.00337,
+      "right_hip_yaw_joint": 0.05889,
+      "right_knee_joint": 0.37554,
+      "right_ankle_pitch_joint": -0.27378,
+      "right_ankle_roll_joint": -0.00035,
+      "left_hip_pitch_joint": -0.091,
+      "left_hip_roll_joint": -0.002,
+      "left_hip_yaw_joint": -0.04544,
+      "left_knee_joint": 0.3242,
+      "left_ankle_pitch_joint": -0.24533,
+      "left_ankle_roll_joint": 0.00021,
+      "waist_yaw_joint": 0.0,
+      "waist_roll_joint": 0.0,
+      "waist_pitch_joint": 0.0,
+      "right_shoulder_pitch_joint": 0.2,
+      "right_shoulder_roll_joint": -0.12,
+      "right_shoulder_yaw_joint": 0.0,
+      "right_elbow_joint": 0.9,
+      "right_wrist_roll_joint": 0.0,
+      "right_wrist_pitch_joint": 0.0,
+      "right_wrist_yaw_joint": 0.0,
+      "left_shoulder_pitch_joint": 0.2,
+      "left_shoulder_roll_joint": 0.12,
+      "left_shoulder_yaw_joint": 0.0,
+      "left_elbow_joint": 0.9,
+      "left_wrist_roll_joint": 0.0,
+      "left_wrist_pitch_joint": 0.0,
+      "left_wrist_yaw_joint": 0.0,
+      "head_yaw_joint": 0.0,
+      "head_pitch_joint": 0.0
+    },
+    "pelvis_height_m": 0.97697,
+    "com_offset_from_sole_centre_mm": -44.2,
+    "feet": "flat, stance width 0.24304 m",
+    "WARNING": "This pose does NOT stand open-loop. Holding it with PD and no policy the robot topples: ankle stiffness is ~95% of the m*g*h the inverted pendulum demands. Measured hold is 6.2 s to a 50 mm drop (HV1V2's own anchor manages 3.9 s), so this is NOT a standing pose for either robot. Keep the policy running."
+  },
+  "gains": {
+    "note": "Simulation joint-space PD, exactly what the policy was trained against. See four_bar_warning before writing these to hardware.",
+    "kp": {
+      "right_hip_pitch_joint": 250.0,
+      "right_hip_roll_joint": 250.0,
+      "right_hip_yaw_joint": 250.0,
+      "right_knee_joint": 250.0,
+      "right_ankle_pitch_joint": 400.0,
+      "right_ankle_roll_joint": 400.0,
+      "left_hip_pitch_joint": 250.0,
+      "left_hip_roll_joint": 250.0,
+      "left_hip_yaw_joint": 250.0,
+      "left_knee_joint": 250.0,
+      "left_ankle_pitch_joint": 400.0,
+      "left_ankle_roll_joint": 400.0,
+      "waist_yaw_joint": 200.0,
+      "waist_roll_joint": 400.0,
+      "waist_pitch_joint": 400.0,
+      "right_shoulder_pitch_joint": 200.0,
+      "right_shoulder_roll_joint": 200.0,
+      "right_shoulder_yaw_joint": 200.0,
+      "right_elbow_joint": 200.0,
+      "right_wrist_roll_joint": 200.0,
+      "right_wrist_pitch_joint": 100.0,
+      "right_wrist_yaw_joint": 100.0,
+      "left_shoulder_pitch_joint": 200.0,
+      "left_shoulder_roll_joint": 200.0,
+      "left_shoulder_yaw_joint": 200.0,
+      "left_elbow_joint": 200.0,
+      "left_wrist_roll_joint": 200.0,
+      "left_wrist_pitch_joint": 100.0,
+      "left_wrist_yaw_joint": 100.0,
+      "head_yaw_joint": 100.0,
+      "head_pitch_joint": 100.0
+    },
+    "kd": {
+      "right_hip_pitch_joint": 15.0,
+      "right_hip_roll_joint": 15.0,
+      "right_hip_yaw_joint": 15.0,
+      "right_knee_joint": 15.0,
+      "right_ankle_pitch_joint": 24.0,
+      "right_ankle_roll_joint": 24.0,
+      "left_hip_pitch_joint": 15.0,
+      "left_hip_roll_joint": 15.0,
+      "left_hip_yaw_joint": 15.0,
+      "left_knee_joint": 15.0,
+      "left_ankle_pitch_joint": 24.0,
+      "left_ankle_roll_joint": 24.0,
+      "waist_yaw_joint": 12.0,
+      "waist_roll_joint": 24.0,
+      "waist_pitch_joint": 24.0,
+      "right_shoulder_pitch_joint": 12.0,
+      "right_shoulder_roll_joint": 12.0,
+      "right_shoulder_yaw_joint": 12.0,
+      "right_elbow_joint": 12.0,
+      "right_wrist_roll_joint": 12.0,
+      "right_wrist_pitch_joint": 6.0,
+      "right_wrist_yaw_joint": 6.0,
+      "left_shoulder_pitch_joint": 12.0,
+      "left_shoulder_roll_joint": 12.0,
+      "left_shoulder_yaw_joint": 12.0,
+      "left_elbow_joint": 12.0,
+      "left_wrist_roll_joint": 12.0,
+      "left_wrist_pitch_joint": 6.0,
+      "left_wrist_yaw_joint": 6.0,
+      "head_yaw_joint": 6.0,
+      "head_pitch_joint": 6.0
+    }
+  },
+  "action": {
+    "scale": {
+      "right_hip_pitch_joint": 0.32,
+      "right_hip_roll_joint": 0.32,
+      "right_hip_yaw_joint": 0.32,
+      "right_knee_joint": 0.32,
+      "right_ankle_pitch_joint": 0.18,
+      "right_ankle_roll_joint": 0.15,
+      "left_hip_pitch_joint": 0.32,
+      "left_hip_roll_joint": 0.32,
+      "left_hip_yaw_joint": 0.32,
+      "left_knee_joint": 0.32,
+      "left_ankle_pitch_joint": 0.18,
+      "left_ankle_roll_joint": 0.15,
+      "waist_yaw_joint": 0.0,
+      "waist_roll_joint": 0.0,
+      "waist_pitch_joint": 0.0,
+      "right_shoulder_pitch_joint": 0.15,
+      "right_shoulder_roll_joint": 0.15,
+      "right_shoulder_yaw_joint": 0.15,
+      "right_elbow_joint": 0.15,
+      "right_wrist_roll_joint": 0.0,
+      "right_wrist_pitch_joint": 0.0,
+      "right_wrist_yaw_joint": 0.0,
+      "left_shoulder_pitch_joint": 0.15,
+      "left_shoulder_roll_joint": 0.15,
+      "left_shoulder_yaw_joint": 0.15,
+      "left_elbow_joint": 0.15,
+      "left_wrist_roll_joint": 0.0,
+      "left_wrist_pitch_joint": 0.0,
+      "left_wrist_yaw_joint": 0.0,
+      "head_yaw_joint": 0.0,
+      "head_pitch_joint": 0.0
+    },
+    "pinned_zero_scale": [
+      "waist_yaw_joint",
+      "waist_roll_joint",
+      "waist_pitch_joint",
+      "right_wrist_roll_joint",
+      "right_wrist_pitch_joint",
+      "right_wrist_yaw_joint",
+      "left_wrist_roll_joint",
+      "left_wrist_pitch_joint",
+      "left_wrist_yaw_joint",
+      "head_yaw_joint",
+      "head_pitch_joint"
+    ],
+    "live": [
+      "right_hip_pitch_joint",
+      "right_hip_roll_joint",
+      "right_hip_yaw_joint",
+      "right_knee_joint",
+      "right_ankle_pitch_joint",
+      "right_ankle_roll_joint",
+      "left_hip_pitch_joint",
+      "left_hip_roll_joint",
+      "left_hip_yaw_joint",
+      "left_knee_joint",
+      "left_ankle_pitch_joint",
+      "left_ankle_roll_joint",
+      "right_shoulder_pitch_joint",
+      "right_shoulder_roll_joint",
+      "right_shoulder_yaw_joint",
+      "right_elbow_joint",
+      "left_shoulder_pitch_joint",
+      "left_shoulder_roll_joint",
+      "left_shoulder_yaw_joint",
+      "left_elbow_joint"
+    ]
+  },
+  "joints": [
+    {
+      "index": 0,
+      "name": "right_hip_pitch_joint",
+      "actuator": "X12-320",
+      "lower": -2.61,
+      "upper": 2.61,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 320.0,
+      "effort_continuous_nm": 85.0
+    },
+    {
+      "index": 1,
+      "name": "right_hip_roll_joint",
+      "actuator": "X12-320",
+      "lower": -1.83,
+      "upper": 0.43,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 320.0,
+      "effort_continuous_nm": 85.0
+    },
+    {
+      "index": 2,
+      "name": "right_hip_yaw_joint",
+      "actuator": "X12-320",
+      "lower": -2.82,
+      "upper": 2.82,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 320.0,
+      "effort_continuous_nm": 85.0
+    },
+    {
+      "index": 3,
+      "name": "right_knee_joint",
+      "actuator": "X12-320",
+      "lower": -0.174,
+      "upper": 2.0944,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 320.0,
+      "effort_continuous_nm": 85.0
+    },
+    {
+      "index": 4,
+      "name": "right_ankle_pitch_joint",
+      "actuator": "X8-120x2",
+      "lower": -0.87,
+      "upper": 0.52,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 240.0,
+      "effort_continuous_nm": 86.0
+    },
+    {
+      "index": 5,
+      "name": "right_ankle_roll_joint",
+      "actuator": "X8-120x2",
+      "lower": -0.26,
+      "upper": 0.26,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 240.0,
+      "effort_continuous_nm": 86.0
+    },
+    {
+      "index": 6,
+      "name": "left_hip_pitch_joint",
+      "actuator": "X12-320",
+      "lower": -2.61,
+      "upper": 2.61,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 320.0,
+      "effort_continuous_nm": 85.0
+    },
+    {
+      "index": 7,
+      "name": "left_hip_roll_joint",
+      "actuator": "X12-320",
+      "lower": -0.43,
+      "upper": 1.83,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 320.0,
+      "effort_continuous_nm": 85.0
+    },
+    {
+      "index": 8,
+      "name": "left_hip_yaw_joint",
+      "actuator": "X12-320",
+      "lower": -2.82,
+      "upper": 2.82,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 320.0,
+      "effort_continuous_nm": 85.0
+    },
+    {
+      "index": 9,
+      "name": "left_knee_joint",
+      "actuator": "X12-320",
+      "lower": -0.174,
+      "upper": 2.0944,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 320.0,
+      "effort_continuous_nm": 85.0
+    },
+    {
+      "index": 10,
+      "name": "left_ankle_pitch_joint",
+      "actuator": "X8-120x2",
+      "lower": -0.87,
+      "upper": 0.52,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 240.0,
+      "effort_continuous_nm": 86.0
+    },
+    {
+      "index": 11,
+      "name": "left_ankle_roll_joint",
+      "actuator": "X8-120x2",
+      "lower": -0.26,
+      "upper": 0.26,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 240.0,
+      "effort_continuous_nm": 86.0
+    },
+    {
+      "index": 12,
+      "name": "waist_yaw_joint",
+      "actuator": "X8-120",
+      "lower": -1.7,
+      "upper": 1.7,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 13,
+      "name": "waist_roll_joint",
+      "actuator": "X8-120x2",
+      "lower": -0.52,
+      "upper": 0.52,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 240.0,
+      "effort_continuous_nm": 86.0
+    },
+    {
+      "index": 14,
+      "name": "waist_pitch_joint",
+      "actuator": "X8-120x2",
+      "lower": -0.52,
+      "upper": 0.52,
+      "velocity_limit": 10.472,
+      "effort_peak_nm": 240.0,
+      "effort_continuous_nm": 86.0
+    },
+    {
+      "index": 15,
+      "name": "right_shoulder_pitch_joint",
+      "actuator": "X8-120",
+      "lower": -2.62,
+      "upper": 1.83,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 16,
+      "name": "right_shoulder_roll_joint",
+      "actuator": "X8-120",
+      "lower": -3.25,
+      "upper": 0.17,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 17,
+      "name": "right_shoulder_yaw_joint",
+      "actuator": "X8-120",
+      "lower": -2.97,
+      "upper": 2.97,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 18,
+      "name": "right_elbow_joint",
+      "actuator": "X8-120",
+      "lower": -0.98,
+      "upper": 3.14,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 19,
+      "name": "right_wrist_roll_joint",
+      "actuator": "X6-60",
+      "lower": -2.62,
+      "upper": 2.62,
+      "velocity_limit": 16.022,
+      "effort_peak_nm": 60.0,
+      "effort_continuous_nm": 20.0
+    },
+    {
+      "index": 20,
+      "name": "right_wrist_pitch_joint",
+      "actuator": "X4-36",
+      "lower": -0.52,
+      "upper": 0.52,
+      "velocity_limit": 8.6917,
+      "effort_peak_nm": 34.0,
+      "effort_continuous_nm": 10.5
+    },
+    {
+      "index": 21,
+      "name": "right_wrist_yaw_joint",
+      "actuator": "X4-36",
+      "lower": -1.08,
+      "upper": 1.08,
+      "velocity_limit": 8.6917,
+      "effort_peak_nm": 34.0,
+      "effort_continuous_nm": 10.5
+    },
+    {
+      "index": 22,
+      "name": "left_shoulder_pitch_joint",
+      "actuator": "X8-120",
+      "lower": -2.62,
+      "upper": 1.83,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 23,
+      "name": "left_shoulder_roll_joint",
+      "actuator": "X8-120",
+      "lower": -0.17,
+      "upper": 3.25,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 24,
+      "name": "left_shoulder_yaw_joint",
+      "actuator": "X8-120",
+      "lower": -2.97,
+      "upper": 2.97,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 25,
+      "name": "left_elbow_joint",
+      "actuator": "X8-120",
+      "lower": -0.98,
+      "upper": 3.14,
+      "velocity_limit": 13.299,
+      "effort_peak_nm": 120.0,
+      "effort_continuous_nm": 43.0
+    },
+    {
+      "index": 26,
+      "name": "left_wrist_roll_joint",
+      "actuator": "X6-60",
+      "lower": -2.62,
+      "upper": 2.62,
+      "velocity_limit": 16.022,
+      "effort_peak_nm": 60.0,
+      "effort_continuous_nm": 20.0
+    },
+    {
+      "index": 27,
+      "name": "left_wrist_pitch_joint",
+      "actuator": "X4-36",
+      "lower": -0.52,
+      "upper": 0.52,
+      "velocity_limit": 8.6917,
+      "effort_peak_nm": 34.0,
+      "effort_continuous_nm": 10.5
+    },
+    {
+      "index": 28,
+      "name": "left_wrist_yaw_joint",
+      "actuator": "X4-36",
+      "lower": -1.08,
+      "upper": 1.08,
+      "velocity_limit": 8.6917,
+      "effort_peak_nm": 34.0,
+      "effort_continuous_nm": 10.5
+    },
+    {
+      "index": 29,
+      "name": "head_yaw_joint",
+      "actuator": "X4-36",
+      "lower": -1.39,
+      "upper": 1.39,
+      "velocity_limit": 8.6917,
+      "effort_peak_nm": 34.0,
+      "effort_continuous_nm": 10.5
+    },
+    {
+      "index": 30,
+      "name": "head_pitch_joint",
+      "actuator": "X4-36",
+      "lower": -0.79,
+      "upper": 0.52,
+      "velocity_limit": 8.6917,
+      "effort_peak_nm": 34.0,
+      "effort_continuous_nm": 10.5
+    }
+  ],
+  "commands": {
+    "order": [
+      "lin_vel_x",
+      "lin_vel_y",
+      "ang_vel_z"
+    ],
+    "trained_ranges": {
+      "lin_vel_x": [
+        -1.2,
+        1.5
+      ],
+      "lin_vel_y": [
+        -1.0,
+        1.0
+      ],
+      "ang_vel_z": [
+        -0.7,
+        0.7
+      ]
+    },
+    "WARNING": "Do not command outside these. The policy has never seen it."
+  },
+  "four_bar_warning": {
+    "joints": [
+      "left_ankle_pitch_joint",
+      "right_ankle_pitch_joint",
+      "left_ankle_roll_joint",
+      "right_ankle_roll_joint",
+      "waist_roll_joint",
+      "waist_pitch_joint"
+    ],
+    "issue": "These six are parallel four-bars driven by two X8-120s each. The linkage AMPLIFIES commanded joint gain, so writing the sim kp (400) straight to the motors will over-stiffen them. Measure the amplification on HV1V1 and divide before deploying.",
+    "h1v1_reference_only": {
+      "ankle_pitch": 2.41,
+      "ankle_roll": 1.23,
+      "waist_roll": 4.0,
+      "waist_pitch": 4.81
+    },
+    "h1v1_caveat": "Those factors were measured on H1-V1 hardware, NOT on HV1V1. They are a starting point for a measurement, not a value to use.",
+    "waist_yaw": "passthrough, not part of any differential - no correction"
+  }
+}
